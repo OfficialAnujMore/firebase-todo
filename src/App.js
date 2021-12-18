@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { FormControl, Button, Input, InputLabel } from "@material-ui/core";
 import Todo from "./components/Todo";
+import db from "./firebase";
 
 function App() {
   const [todo, setTodo] = useState([
@@ -11,12 +12,29 @@ function App() {
   ]);
   const [input, setInput] = useState("");
 
+  useEffect(() => {
+    // console.log(firebase);
+    // console.log(db);
+
+    try {
+      db.collection("todos").onSnapshot((snapshot) => {
+        console.log(
+          snapshot.docs.map((doc) => doc.data().todo)
+        );
+
+        setTodo(snapshot.docs.map((doc) => doc.data().todo));
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   console.log(input);
 
   const addTodo = (event) => {
     event.preventDefault();
     setTodo([...todo, input]);
-    setInput("");
+    setInput("jjgj");
   };
 
   return (
