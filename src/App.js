@@ -3,27 +3,21 @@ import "./App.css";
 import { FormControl, Button, Input, InputLabel } from "@material-ui/core";
 import Todo from "./components/Todo";
 import db from "./firebase";
+import firebase from "firebase";
 
 function App() {
-  const [todo, setTodo] = useState([
-    "Develop react todo list",
-    "Prepare for exam",
-    "Pay bike maintenance",
-  ]);
+  const [todo, setTodo] = useState([]);
   const [input, setInput] = useState("");
 
   useEffect(() => {
     // console.log(firebase);
     // console.log(db);
-
     try {
-      db.collection("todos").onSnapshot((snapshot) => {
-        console.log(
-          snapshot.docs.map((doc) => doc.data().todo)
-        );
-
-        setTodo(snapshot.docs.map((doc) => doc.data().todo));
-      });
+      db.collection("todos")
+        .orderBy("timeStamp", "desc")
+        .onSnapshot((snapshot) => {
+          setTodo(snapshot.docs.map((doc) => doc.data().todo));
+        });
     } catch (err) {
       console.log(err);
     }
@@ -33,8 +27,14 @@ function App() {
 
   const addTodo = (event) => {
     event.preventDefault();
+
+    db.collection("todos").add({
+      todo: input,
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
     setTodo([...todo, input]);
-    setInput("jjgj");
+    setInput("");
   };
 
   return (

@@ -72,3 +72,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### firebase version
 
 npm i firebase@^8.10.0
+
+
+### URL
+https://fir-todo-3a7d1.web.app/
