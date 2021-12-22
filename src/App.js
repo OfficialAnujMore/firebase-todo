@@ -5,6 +5,7 @@ import Todo from "./components/Todo";
 import db from "./firebase";
 import firebase from "firebase";
 
+
 function App() {
   const [todo, setTodo] = useState([]);
   const [input, setInput] = useState("");
@@ -16,7 +17,7 @@ function App() {
       db.collection("todos")
         .orderBy("timeStamp", "desc")
         .onSnapshot((snapshot) => {
-          setTodo(snapshot.docs.map((doc) => doc.data().todo));
+          setTodo(snapshot.docs.map((doc) =>({id: doc.id, todo: doc.data().todo})));
         });
     } catch (err) {
       console.log(err);
@@ -59,7 +60,7 @@ function App() {
 
       <ul>
         {todo.map((item) => (
-          <Todo text={item} />
+          <Todo todoItem={item} />
         ))}
       </ul>
     </div>
